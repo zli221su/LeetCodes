@@ -1,0 +1,36 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(candidates == null) {
+            return result;
+        }
+        //Arrays.sort(candidates);
+        List<Integer> subResult = new ArrayList<Integer>();
+        DFS(0, candidates, target, subResult, result);
+        return result;
+        
+        
+    }
+    private void DFS(int index, int[] candidates, int target, List<Integer> subResult, List<List<Integer>> result) {
+        if (index >= candidates.length) {
+            if (target == 0) {
+                result.add(new ArrayList<Integer>(subResult));
+            }
+            return;
+        }
+        DFS(index + 1, candidates, target, subResult, result);
+        int currentCandidateCount = 1;
+        for (currentCandidateCount = 1; candidates[index] <= target; currentCandidateCount++){
+            subResult.add(candidates[index]);
+            target -= candidates[index];
+            DFS(index + 1, candidates, target, subResult, result);
+        }
+        for (; currentCandidateCount > 1; currentCandidateCount--) {
+            subResult.remove(subResult.size() - 1);
+        }
+        return;
+    }
+}
+
+//time complexity up to O(target^2 + n)
+//space complexity: O(target)(call stack)

@@ -1,0 +1,37 @@
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        // Assumption: candidates only contains positive numbers
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null) {
+            return result;
+        }
+        Arrays.sort(candidates);
+        List<Integer> subResult = new ArrayList<>();
+        DFS(0, candidates, target, result, subResult);
+        return result;
+        
+    }
+    private void DFS(int index, int[] candidates, int target, List<List<Integer>> result, List<Integer> subResult) {
+        if (index >= candidates.length) {
+            if (target == 0) {
+                result.add(new ArrayList<Integer>(subResult));
+            }
+            return;
+        }
+        int countOfDuplicate = 0;
+        while((index + 1 + countOfDuplicate) < candidates.length && candidates[index + 1 + countOfDuplicate] == candidates[index + countOfDuplicate]){
+            countOfDuplicate++;
+        }
+        DFS(index + 1 + countOfDuplicate, candidates, target, result, subResult);
+        if (candidates[index] <= target) {
+            subResult.add(candidates[index]);
+            target -= candidates[index];
+            DFS(index + 1, candidates, target, result, subResult);
+            subResult.remove(subResult.size() - 1);
+        }
+        return;
+    }
+}
+
+//time complexity: O(nlogn)(sorting) + O(2^n)(DFS)
+//space complexity: O(n)(call stack and subResult)

@@ -1,0 +1,40 @@
+class Solution {
+    public List<String> readBinaryWatch(int num) {
+        List<String> result = new ArrayList<>();
+        if(num < 0){
+            return result;
+        }
+        int[] lights = new int[10];
+        helper(num, 0, lights, result);
+        return result;
+    }
+    private void helper(int num, int level, int[] lights, List<String> result) {
+        if (num == 0) {
+            int hour = calHour(lights);
+            int minute = calMinute(lights);
+            if (hour > 11 || minute > 59) {
+                return;
+            }
+            String minuteString = minute > 9 ? String.valueOf(minute) : ("0" + String.valueOf(minute));
+            result.add(String.valueOf(hour) + ":" + minuteString);
+            return;
+        }
+        if(10 - level < num){
+            return;
+        }
+        helper(num, level + 1, lights, result);
+        lights[level] += 1;
+        helper(num - 1, level + 1, lights, result);
+        lights[level] -= 1;
+        return;
+    }
+    private int calHour(int[] lights) {
+        return lights[0] * 8 + lights[1] * 4 + lights[2] * 2 + lights[3] * 1;
+    }
+    private int calMinute(int[] lights) {
+        return lights[4] * 32 + lights[5] * 16 + lights[6] * 8 + lights[7] * 4 + lights[8] * 2 + lights[9] * 1;
+    }
+}
+
+//time complexity: O(1)(since the wathc have limitied lights)
+//space complexity: O(1)(since the wathc have limitied lights)
