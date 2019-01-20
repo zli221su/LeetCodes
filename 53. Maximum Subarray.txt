@@ -1,0 +1,24 @@
+class Solution {
+    public int maxSubArray(int[] nums) {
+        //Assumption: nums is not null and nums.length >= 1
+        int result = nums[0];
+        int currentSum = 0;
+        // int left = 1; //starting element of the max sum
+        int right = 0; // ending element of the max sum
+        
+        while (right < nums.length) {
+            if((currentSum + nums[right]) < 0){
+                currentSum = 0;
+                result = Math.max(nums[right], result);
+                right++;
+            }
+            else{
+                currentSum += nums[right];
+                result = Math.max(currentSum, result);
+                right++;
+            }
+        }
+        return result;
+        
+    }
+}
