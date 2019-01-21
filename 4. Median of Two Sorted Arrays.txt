@@ -1,0 +1,65 @@
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        // Assumptions: num1 and num2 are not null
+        //num1 and num2 are not both empty
+        if (nums1.length == 1 && nums2.length == 1){
+            return ((double)nums1[0] + (double)nums2[0]) / 2;
+        }
+        return findMedian(nums1, nums2, 0, 0, (nums1.length + nums2.length) / 2);
+    }
+    
+    private double findMedian(int[] nums1, int[] nums2, int seperator1, int seperator2, int remain) {
+        System.out.println(String.valueOf(seperator1) + " " + String.valueOf(seperator2) + "    " + String.valueOf(remain));
+        if (seperator1 >= nums1.length) {
+            seperator2 = nums2.length - 1 - (nums1.length + nums2.length) / 2;
+            return (nums1.length + nums2.length) % 2 == 0 ? 
+                ((double)nums2[seperator2] + (double)nums2[seperator2 + 1]) / 2: nums2[seperator2];
+        }
+        if (seperator2 >= nums2.length) {
+            seperator1 = nums1.length - 1 - (nums1.length + nums2.length) / 2;
+            return (nums1.length + nums2.length) % 2 == 0 ? 
+                ((double)nums1[seperator1] + (double)nums1[seperator1 + 1]) / 2: nums1[seperator1];
+        }
+        if (remain == 1){
+            if ((nums1.length + nums2.length) % 2 == 0){
+                int first = Integer.MIN_VALUE;
+                int second = Integer.MIN_VALUE;
+                if(nums1[seperator1] < nums2[seperator2]){
+                    first = nums1[seperator1];
+                    second = (seperator1 + 1) < nums1.length ? Math.min(nums1[seperator1 + 1], nums2[seperator2]) : nums2[seperator2];
+                }
+                else{
+                    first = nums2[seperator2];
+                    second = (seperator2 + 1) < nums2.length ? Math.min(nums2[seperator2 + 1], nums1[seperator1]) : nums1[seperator1];
+                }
+                return ((double)first + (double)second) / 2;
+            }
+            else {
+                if(nums1[seperator1] < nums2[seperator2]){
+                    return (seperator1 + 1) < nums1.length ? Math.min(nums1[seperator1 + 1], nums2[seperator2]) : nums2[seperator2];
+                }
+                else{
+                    return (seperator2 + 1) < nums2.length ? Math.min(nums2[seperator2 + 1], nums1[seperator1]) : nums1[seperator1];
+                }
+            }
+        }
+        
+        int newSeperator1 = seperator1 + remain / 2;
+        int newSeperator2 = seperator2 + remain / 2;
+        if (newSeperator1 > nums1.length) {
+            newSeperator1 = seperator1;
+        }
+        else if (newSeperator2 > nums2.length){
+            newSeperator2 = seperator2;
+        }
+        else if (nums1[newSeperator1 - 1] < nums2[newSeperator2 - 1]) {
+            newSeperator2 = seperator2;
+        }
+        else {
+            newSeperator1 = seperator1;
+        }
+        return findMedian(nums1, nums2, newSeperator1, newSeperator2, remain - remain / 2);
+    }
+}
+
+//time complexity O(log(m + n))
