@@ -1,0 +1,45 @@
+class Solution {
+    public int totalFruit(int[] tree) {
+        //Sliding windows
+        //Assumtions: tree.length >=1 && tree.length <= 40000
+        Deque<Integer> queue = new ArrayDeque<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        int kindCount = 0;
+        int result = 0;
+        int curTotal = 0;
+        
+        int left = -1;
+        int right = 0;
+        while (right < tree.length) {
+            queue.offerLast(tree[right]);
+            if (!map.containsKey(tree[right])){
+                map.put(tree[right], 1);
+                kindCount++;
+            }
+            else {
+                int curKindAmount = map.get(tree[right]);
+                map.put(tree[right], curKindAmount + 1);
+                if (curKindAmount == 0) {
+                    kindCount++;
+                }
+            }
+            curTotal++;
+            right++;
+            while (kindCount > 2){
+                queue.pollFirst();
+                int curKindAmount = map.get(tree[left + 1]);
+                if (curKindAmount == 1) {
+                    kindCount--;
+                }
+                map.put(tree[left + 1], curKindAmount - 1);
+                curTotal--;
+                left++;
+            }
+            result = Math.max(result, curTotal);
+        }
+        return result;
+    }
+}
+// time complexity O(n)
+// space complexity O(n)
