@@ -1,0 +1,51 @@
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public int minMeetingRooms(Interval[] intervals) {
+        int rooms = 0;
+        if (intervals == null || intervals.length == 0) {
+            return rooms;
+        }
+        PriorityQueue<Interval> priQueue = new PriorityQueue<Interval>(11, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval i1, Interval i2) {
+                if (i1.end == i2.end) {
+                    return 0;
+                }
+                return i1.end < i2.end ? -1 : 1;
+            }
+        });
+        Arrays.sort(intervals, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval i1, Interval i2) {
+                if (i1.start == i2.start) {
+                    return 0;
+                }
+                return i1.start < i2.start ? -1 : 1;
+            }
+        });
+        priQueue.offer(intervals[0]);
+        rooms++;
+        for (int i = 1; i < intervals.length; i++) {
+            Interval earliest = priQueue.peek();
+            if (earliest.end <= intervals[i].start) {
+                priQueue.poll();
+            }
+            else {
+                rooms++;
+            }
+            priQueue.offer(intervals[i]);
+        }
+        return rooms;
+    }
+}
+
+// time complexity: O(nlogn)
+// space complexity: O(n)
