@@ -1,0 +1,28 @@
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        // Assumption: n >= 0
+        List<String> result = new ArrayList<>();
+        if (n == 0) {
+            return result;
+        }
+        StringBuilder sb = new StringBuilder();
+        helper(0, 0, n, sb, result);
+        return result;
+    }
+    private void helper(int left, int right, int n, StringBuilder sb, List<String> result) {
+        if (right == n) {
+            result.add(sb.toString());
+            return;
+        }
+        if (right < left) {
+            sb.append(')');
+            helper(left, right + 1, n, sb, result);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if (left < n) {
+            sb.append('(');
+            helper(left + 1, right, n, sb, result);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+}
