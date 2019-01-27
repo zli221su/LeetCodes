@@ -1,0 +1,43 @@
+class Solution {
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return;
+        }
+        int left;
+        int curMax = nums.length - 1;
+        for (left = nums.length - 1; left >= 0; left--) {
+            if (nums[left] < nums[curMax]) {
+                // search for the smallest element which is smaller than nums[left]
+                int nearest = curMax;
+                for (int right = left + 1; right < nums.length; right++){
+                    if (nums[right] > nums[left] && nums[right] <= nums[nearest]){
+                        nearest = right;
+                    }
+                }
+                // swap nearest and left
+                swap(nums, left, nearest);
+                break;
+            }
+            curMax = nums[left] > nums[curMax] ? left : curMax;
+        }
+        if (left < 0) {
+            reverse(nums, 0, nums.length);
+            return;
+        }
+        reverse(nums, left + 1, nums.length);
+        return;
+    }
+    private void reverse(int[] array, int start, int end) {
+        for (int i = start; i < (start + end) / 2; i++) {
+            swap(array, i, end + start - i - 1);
+        }
+    }
+    private void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+
+// time complexity: O(n)
+// Space complexity: O(1);
