@@ -1,0 +1,60 @@
+class Solution {
+    public String nextClosestTime(String time) {
+        //Assume input time is valid!
+        
+        int[] t = new int[4];        
+        t[0] = (int)time.charAt(0) - 48;
+        t[1] = (int)time.charAt(1) - 48;
+        t[2] = (int)time.charAt(3) - 48;
+        t[3] = (int)time.charAt(4) - 48;
+        
+        int[] newTime = new int[4];
+        int minDif = 1441;
+        int[] curMinTime = new int[4];
+        assign(t, curMinTime);
+        
+        for (int i0 = 0; i0 < 4; i0++) {
+            newTime[0] = t[i0];
+            for(int i1 = 0; i1 < 4; i1++) {
+                newTime[1] = t[i1];
+                for (int i2 = 0; i2 < 4; i2++) {
+                    newTime[2] = t[i2];
+                    for(int i3 = 0; i3 < 4; i3++) {
+                        newTime[3] = t[i3];
+                        int dif = timeDif(t, newTime);
+                        if (isValidTime(newTime) && dif != 0 && dif < minDif){
+                            assign(newTime, curMinTime);
+                            minDif = dif;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return String.valueOf(curMinTime[0]) + String.valueOf(curMinTime[1]) + ":" + String.valueOf(curMinTime[2]) + String.valueOf(curMinTime[3]);
+        
+    }
+    private boolean isValidTime(int[] t) {
+        if (t[0] >= 3 || t[2] >= 6) {
+            return false;
+        }
+        if ((t[0] * 10 + t[1]) >= 24) {
+            return false;
+        }
+        if ((t[2] * 10 + t[3]) >= 60) {
+            return false;
+        }
+        return true;
+    }
+    private int timeDif(int[] oldTime, int[] newTime) {
+        int dif = ((newTime[0] - oldTime[0]) * 600 + (newTime[1] - oldTime[1]) * 60 + (newTime[2] - oldTime[2]) * 10 + (newTime[3] - oldTime[3]));
+        return dif < 0 ? dif + 1440 : dif;
+    }
+    private void assign(int[] array1, int[] array2){
+        for(int i = 0; i < array1.length && i < array2.length; i++){
+            array2[i] = array1[i];
+        }
+    }
+}
+// time complexity O(1)
+// This problem only contains limitted possible states.

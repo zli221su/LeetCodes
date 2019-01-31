@@ -1,0 +1,21 @@
+class Solution {
+    public int numJewelsInStones(String J, String S) {
+        if (J == null || J.length() == 0 || S == null || S.length() == 0) {
+            return 0;
+        }
+        Set<Character> jewels = new HashSet<>();
+        for (int i = 0; i < J.length(); i++) {
+            jewels.add(J.charAt(i));
+        }
+        int result = 0;
+        for (int i = 0; i < S.length(); i++) {
+            if (jewels.contains(S.charAt(i))) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
+
+// time complexity: O(J.length() + S.length());
+// space complexity: O(J.length());
