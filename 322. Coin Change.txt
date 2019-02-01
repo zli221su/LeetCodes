@@ -1,0 +1,24 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        // Assume amount >= 0
+        if (coins == null || coins.length == 0 && amount != 0) {
+            return -1;
+        }
+        
+        int[] map = new int[amount + 1];
+        Arrays.fill(map, amount + 1);
+        map[0] = 0;
+        
+        for (int sum = 0; sum <= amount; sum++) {
+            for (int index = 0; index < coins.length; index++) {
+                if (coins[index] <= sum){
+                    map[sum] = Math.min(map[sum], map[sum - coins[index]] + 1);
+                }
+            }
+        }
+        return map[amount] > amount ? -1 : map[amount];
+        
+    }
+}
+// time complexity: O(amount * coins.length)
+// space complexity: O(amount)
