@@ -1,0 +1,51 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return result;
+        }
+        helper(matrix, result, 0);
+        return result;
+    }
+    private void helper(int[][] matrix, List<Integer> result, int level) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        if (level > ((Math.min(m, n) - 1) / 2)) {
+            return;
+        }
+        
+        int i = level;
+        int j = level;
+        if ((2 * level + 1) == m) {
+            for (; j < (matrix[0].length - level); j++) {
+                result.add(matrix[i][j]);
+            }
+            return;
+        }
+        if ((2 * level + 1) == n) {
+            for (; i < (matrix.length - level); i++) {
+                result.add(matrix[i][j]);
+            }
+            return;
+        }
+        
+
+        for (; j < (matrix[0].length - 1 - level); j++) {
+            result.add(matrix[i][j]);
+        }
+        for (; i < (matrix.length - 1 - level); i++) {
+            result.add(matrix[i][j]);
+        }
+        for (; j > level; j--) {
+            result.add(matrix[i][j]);
+        }
+        for (; i > level; i--) {
+            result.add(matrix[i][j]);
+        }
+        helper(matrix, result, level + 1);
+        
+    }
+}
+
+// time complexity: O(m * n)
+// space complexity: O(max(m, n))
