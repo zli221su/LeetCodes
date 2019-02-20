@@ -1,0 +1,57 @@
+class Solution {
+    public int numSquarefulPerms(int[] A) {
+        if (A == null || A.length == 0) {
+            return 0;
+        }
+        Arrays.sort(A);
+        int[] count = new int[1];
+        helper(A, 0, count);
+        return count[0];
+    }
+    private void helper(int[] A, int level, int[] count) {
+        if (level >= A.length) {
+            if (checkValid(A, A.length - 2, A.length - 1)) {
+                count[0]++;
+            }
+            return;
+        }
+        if (!checkValid(A, level - 2, level - 1)) {
+            return;
+        }
+        for (int i = level ; i < A.length; i++) {
+            swap(A, level, i);
+            helper(A, level + 1, count);
+            swap(A, level, i);
+            while (i < (A.length - 1) && A[i] == A[i + 1]){
+                i++;
+            }
+        }
+    }
+    private void swap(int[] A, int i, int j){
+        int temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
+    }
+    private boolean checkValid(int[] A, int start, int end) {
+        start = start > 0 ? start : 0;
+        for(int i = start; i < end; i++){
+            if (!isSqrt(A[i] + A[i + 1])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean isSqrt (int num) {
+        for (int i = 0; i * i <= num; i++) {
+            if (i * i == num) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+Time Complexity: O(n^2)
+(Average time complexity will be much lesser than n^2 due to pruning)
+Space Complexity: O(n)
