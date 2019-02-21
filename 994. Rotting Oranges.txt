@@ -1,0 +1,60 @@
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0){
+            return -1;
+        }
+        int[][] rotted = new int[grid.length][grid[0].length];
+        int time = 0;
+        while (haveUnrooted(grid)) {
+            time++;
+            renewRottedState(grid, rotted);
+            if(!springRot(grid, rotted)){
+                return -1;
+            }
+        }
+        return time;
+    }
+    private void renewRottedState(int[][] grid, int[][] rotted){
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                rotted[i][j] = grid[i][j] == 2 ? 2 : 0;
+            }
+        }
+    }
+    private boolean springRot(int[][] grid, int[][] rotted){
+        boolean update = false;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (rotted[i][j] == 2) {
+                    if (i > 0 && grid[i - 1][j] == 1) {
+                        update = true;
+                        grid[i - 1][j] = 2;
+                    }
+                    if (j > 0 && grid[i][j - 1] == 1) {
+                        update = true;
+                        grid[i][j - 1] = 2;
+                    }
+                    if (i < (grid.length - 1) && grid[i + 1][j] == 1) {
+                        update = true;
+                        grid[i + 1][j] = 2;
+                    }
+                    if (j < (grid[0].length - 1) && grid[i][j + 1] == 1) {
+                        update = true;
+                        grid[i][j + 1] = 2;
+                    }
+                }
+            }
+        }
+        return update;
+    }
+    private boolean haveUnrooted(int[][] grid){
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}

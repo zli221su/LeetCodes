@@ -1,0 +1,48 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if (root == null) {
+            return false;
+        }
+        int[] levels = new int[3];
+        levels[0] = 0;
+        levels[1] = -1;
+        levels[2] = -1;
+        return helper(root, x, y, 0, levels);
+    }
+    private boolean helper(TreeNode root, int x, int y, int level, int[] levels) {
+        if(root == null){
+            return false;
+        }
+        if (root.val == x){
+            levels[1] = level;
+            return false;
+        }
+        if(root.val == y){
+            levels[2] = level;
+            return false;
+        }
+        boolean left = helper(root.left, x, y, level + 1, levels);
+        boolean right = helper(root.right, x, y, level + 1, levels);
+        if (left == true || right == true){
+            return true;
+        }
+        else {
+            if(root.left == null || root.right == null || levels[1] == -1 || levels[2] == -1) {
+                return false;
+            }
+            if((root.left.val == x && root.right.val == y) || (root.left.val == y && root.right.val == x)){
+                levels[0] = -1;
+            }
+            return levels[1] == levels[2] && levels[0] != -1;
+        }
+    }
+}
